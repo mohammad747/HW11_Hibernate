@@ -4,6 +4,7 @@ import ir.maktabsharif.model.Address.Address;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,16 +12,14 @@ import java.util.List;
 public class Employee implements Serializable {
 
     @Id
-    @Column(name = "employee_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-
-    @Column(name = "employee_code", nullable = false, unique = true)
-    private Long employeeCode;
+    @Column(name = "empCode")
+    private int empCode;
 
     @Column(name = "salary")
     private Double salary;
@@ -29,11 +28,12 @@ public class Employee implements Serializable {
     private List<Address> address;
 
     public Employee() {
+
     }
 
-    public Employee(String name, Long employeeCode, Double salary) {
+    public Employee(String name, int empCode, Double salary) {
         this.name = name;
-        this.employeeCode = employeeCode;
+        this.empCode = empCode;
         this.salary = salary;
     }
 
@@ -53,12 +53,12 @@ public class Employee implements Serializable {
         this.name = name;
     }
 
-    public Long getEmployeeCode() {
-        return employeeCode;
+    public int getEmpCode() {
+        return empCode;
     }
 
-    public void setEmployeeCode(Long employeeCode) {
-        this.employeeCode = employeeCode;
+    public void setEmpCode(int empCode) {
+        this.empCode = empCode;
     }
 
     public Double getSalary() {
@@ -73,8 +73,12 @@ public class Employee implements Serializable {
         return address;
     }
 
-    public void setAddress(List<Address> address) {
-        this.address = address;
+    public void setAddress(Address address) {
+        if (this.address == null) {
+            this.address=new ArrayList<Address>();
+        }
+        this.address.add(address);
+        address.setEmployee(this);
     }
 
     @Override
@@ -82,7 +86,7 @@ public class Employee implements Serializable {
         return "Employee{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", employeeCode=" + employeeCode +
+                ", empCode=" + empCode +
                 ", salary=" + salary +
                 ", address=" + address +
                 '}';
